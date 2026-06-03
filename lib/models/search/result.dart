@@ -172,7 +172,6 @@ class SearchUserItemModel {
     this.level,
     this.gender,
     this.isUpUser,
-    this.isLive,
     this.roomId,
     this.officialVerify,
   });
@@ -190,7 +189,6 @@ class SearchUserItemModel {
   int? level;
   int? gender;
   int? isUpUser;
-  int? isLive;
   int? roomId;
   Map? officialVerify;
 
@@ -208,186 +206,8 @@ class SearchUserItemModel {
     level = json['level'];
     gender = json['gender'];
     isUpUser = json['is_upuser'];
-    isLive = json['is_live'];
     roomId = json['room_id'];
     officialVerify = json['official_verify'];
-  }
-}
-
-class SearchLiveModel {
-  SearchLiveModel({this.list});
-  List<SearchLiveItemModel>? list;
-  SearchLiveModel.fromJson(Map<String, dynamic> json) {
-    list = json['result']
-        .map<SearchLiveItemModel>((e) => SearchLiveItemModel.fromJson(e))
-        .toList();
-  }
-}
-
-class SearchLiveItemModel {
-  SearchLiveItemModel({
-    this.rankOffset,
-    this.uid,
-    this.tags,
-    this.liveTime,
-    this.uname,
-    this.uface,
-    this.face,
-    this.userCover,
-    this.type,
-    this.title,
-    this.titleList,
-    this.cover,
-    this.pic,
-    this.online,
-    this.rankIndex,
-    this.rankScore,
-    this.roomid,
-    this.attentions,
-    this.cateName,
-  });
-
-  int? rankOffset;
-  int? uid;
-  String? tags;
-  String? liveTime;
-  String? uname;
-  String? uface;
-  String? face;
-  String? userCover;
-  String? type;
-  String? title;
-  List? titleList;
-  String? cover;
-  String? pic;
-  int? online;
-  int? rankIndex;
-  int? rankScore;
-  int? roomid;
-  int? attentions;
-  String? cateName;
-  Map? watchedShow;
-
-  SearchLiveItemModel.fromJson(Map<String, dynamic> json) {
-    rankOffset = json['rank_offset'];
-    uid = json['uid'];
-    tags = json['tags'];
-    liveTime = json['live_time'];
-    uname = json['uname'];
-    uface = json['uface'];
-    face = json['uface'];
-    userCover = json['user_cover'];
-    type = json['type'];
-    title = json['title'].replaceAll(RegExp(r'<.*?>'), '');
-    titleList = Em.regTitle(json['title']);
-    cover = json['cover'];
-    pic = json['cover'];
-    online = json['online'];
-    rankIndex = json['rank_index'];
-    rankScore = json['rank_score'];
-    roomid = json['roomid'];
-    attentions = json['attentions'];
-    cateName = Em.regCate(json['cate_name']) ?? '';
-  }
-}
-
-class SearchMBangumiModel {
-  SearchMBangumiModel({this.list});
-  List<SearchMBangumiItemModel>? list;
-  SearchMBangumiModel.fromJson(Map<String, dynamic> json) {
-    list = json['result'] != null
-        ? json['result']
-            .map<SearchMBangumiItemModel>(
-                (e) => SearchMBangumiItemModel.fromJson(e))
-            .toList()
-        : [];
-  }
-}
-
-class SearchMBangumiItemModel {
-  SearchMBangumiItemModel({
-    this.type,
-    this.mediaId,
-    this.title,
-    this.titleList,
-    this.orgTitle,
-    this.mediaType,
-    this.cv,
-    this.staff,
-    this.seasonId,
-    this.isAvid,
-    this.hitEpids,
-    this.seasonType,
-    this.seasonTypeName,
-    this.url,
-    this.buttonText,
-    this.isFollow,
-    this.isSelection,
-    this.cover,
-    this.areas,
-    this.styles,
-    this.gotoUrl,
-    this.desc,
-    this.pubtime,
-    this.mediaMode,
-    this.mediaScore,
-    this.indexShow,
-  });
-
-  String? type;
-  int? mediaId;
-  String? title;
-  List? titleList;
-  String? orgTitle;
-  int? mediaType;
-  String? cv;
-  String? staff;
-  int? seasonId;
-  bool? isAvid;
-  String? hitEpids;
-  int? seasonType;
-  String? seasonTypeName;
-  String? url;
-  String? buttonText;
-  int? isFollow;
-  int? isSelection;
-  String? cover;
-  String? areas;
-  String? styles;
-  String? gotoUrl;
-  String? desc;
-  int? pubtime;
-  int? mediaMode;
-  Map? mediaScore;
-  String? indexShow;
-
-  SearchMBangumiItemModel.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    mediaId = json['media_id'];
-    title = json['title'].replaceAll(RegExp(r'<.*?>'), '');
-    titleList = Em.regTitle(json['title']);
-    orgTitle = json['org_title'];
-    mediaType = json['media_type'];
-    cv = json['cv'];
-    staff = json['staff'];
-    seasonId = json['season_id'];
-    isAvid = json['is_avid'];
-    hitEpids = json['hit_epids'];
-    seasonType = json['season_type'];
-    seasonTypeName = json['season_type_name'];
-    url = json['url'];
-    buttonText = json['button_text'];
-    isFollow = json['is_follow'];
-    isSelection = json['is_selection'];
-    cover = json['cover'];
-    areas = json['areas'];
-    styles = json['styles'];
-    gotoUrl = json['goto_url'];
-    desc = json['desc'];
-    pubtime = json['pubtime'];
-    mediaMode = json['media_mode'];
-    mediaScore = json['media_score'];
-    indexShow = json['index_show'];
   }
 }
 

@@ -2,14 +2,14 @@
 enum SearchType {
   // 视频：video
   video,
-  // 番剧：media_bangumi,
+  // 番剧：media_bangumi（仅用于视频详情页区分番剧播放类型，不用于搜索）
   media_bangumi,
   // 影视：media_ft
   // media_ft,
   // 直播间及主播：live
   // live,
   // 直播间：live_room
-  live_room,
+  // live_room,
   // 主播：live_user
   // live_user,
   // 话题：topic
@@ -22,10 +22,26 @@ enum SearchType {
   // photo
 }
 
+// 搜索Tab列表（排除 media_bangumi，仅用于搜索界面）
+const List<SearchType> searchTypes = [SearchType.video, SearchType.bili_user, SearchType.article];
+
 extension SearchTypeExtension on SearchType {
-  String get type =>
-      ['video', 'media_bangumi', 'live_room', 'bili_user', 'article'][index];
-  String get label => ['视频', '番剧', '直播间', '用户', '专栏'][index];
+  String get type {
+    switch (this) {
+      case SearchType.video: return 'video';
+      case SearchType.media_bangumi: return 'media_bangumi';
+      case SearchType.bili_user: return 'bili_user';
+      case SearchType.article: return 'article';
+    }
+  }
+  String get label {
+    switch (this) {
+      case SearchType.video: return '视频';
+      case SearchType.media_bangumi: return '番剧';
+      case SearchType.bili_user: return '用户';
+      case SearchType.article: return '专栏';
+    }
+  }
 }
 
 // 搜索类型为视频时

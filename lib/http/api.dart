@@ -222,21 +222,6 @@ class Api {
   // order_type 排序规则 最近访问传空，最常访问传 attention
   static const String fans = '/x/relation/fans';
 
-  // 直播
-  // ?page=1&page_size=30&platform=web
-  static const String liveList =
-      '${HttpString.liveBaseUrl}/xlive/web-interface/v1/second/getUserRecommend';
-
-  // 直播间详情
-  // cid roomId
-  // qn 80:流畅，150:高清，400:蓝光，10000:原画，20000:4K, 30000:杜比
-  static const String liveRoomInfo =
-      '${HttpString.liveBaseUrl}/xlive/web-room/v2/index/getRoomPlayInfo';
-
-  // 直播间详情 H5
-  static const String liveRoomInfoH5 =
-      '${HttpString.liveBaseUrl}/xlive/web-room/v1/index/getH5InfoByRoom';
-
   // 用户信息 需要Wbi签名
   // https://api.bilibili.com/x/space/wbi/acc/info?mid=503427686&token=&platform=web&web_location=1550101&w_rid=d709892496ce93e3d94d6d37c95bde91&wts=1689301482
   static const String memberInfo = '/x/space/wbi/acc/info';
@@ -298,13 +283,6 @@ class Api {
   // season_type=1&
   // pagesize=20&
   // type=1
-  static const String bangumiList =
-      '/pgc/season/index/result?st=1&order=3&season_version=-1&spoken_language_type=-1&area=-1&is_finish=-1&copyright=-1&season_status=-1&season_month=-1&year=-1&style_id=-1&sort=0&season_type=1&pagesize=20&type=1';
-
-  // 我的订阅
-  static const String bangumiFollow =
-      '/x/space/bangumi/follow/list?type=1&follow_status=0&pn=1&ps=15&ts=1691544359969';
-
   // 黑名单
   static const String blackLst = '/x/relation/blacks';
 
@@ -569,17 +547,6 @@ class Api {
   /// 新建收藏夹
   static const String addFavFolder = '/x/v3/fav/folder/add';
 
-  /// 直播间弹幕信息
-  static const String getDanmuInfo =
-      '${HttpString.liveBaseUrl}/xlive/web-room/v1/index/getDanmuInfo';
-
-  /// 直播间发送弹幕
-  static const String sendLiveMsg = '${HttpString.liveBaseUrl}/msg/send';
-
-  /// 我的关注 - 正在直播
-  static const String getFollowingLive =
-      '${HttpString.liveBaseUrl}/xlive/web-ucenter/user/following';
-
   /// 稍后再看&收藏夹视频列表
   static const String mediaList = '/x/v2/medialist/resource/list';
 
@@ -588,10 +555,6 @@ class Api {
 
   ///
   static const String getViewInfo = '/x/article/viewinfo';
-
-  /// 直播间记录
-  static const String liveRoomEntry =
-      '${HttpString.liveBaseUrl}/xlive/web-room/v1/index/roomEntryAction';
 
   /// 删除评论
   static const String replyDel = '/x/v2/reply/del';

@@ -54,7 +54,7 @@ class EpisodeBottomSheet {
             dense: false,
             leading: isCurrentIndex
                 ? Image.asset(
-                    'assets/images/live.gif',
+                    'assets/images/playing.gif',
                     color: primary,
                     height: 12,
                   )

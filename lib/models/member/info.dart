@@ -10,7 +10,6 @@ class MemberInfoModel {
     this.topPhoto,
     this.official,
     this.vip,
-    this.liveRoom,
   });
 
   int? mid;
@@ -23,7 +22,6 @@ class MemberInfoModel {
   String? topPhoto;
   Map? official;
   Vip? vip;
-  LiveRoom? liveRoom;
 
   MemberInfoModel.fromJson(Map<String, dynamic> json) {
     mid = json['mid'];
@@ -36,8 +34,6 @@ class MemberInfoModel {
     topPhoto = json['top_photo'];
     official = json['official'];
     vip = Vip.fromJson(json['vip']);
-    liveRoom =
-        json['live_room'] != null ? LiveRoom.fromJson(json['live_room']) : null;
   }
 }
 
@@ -64,38 +60,5 @@ class Vip {
     nicknameColor = json['nickname_color'] == ''
         ? null
         : int.parse("0xFF${json['nickname_color'].replaceAll('#', '')}");
-  }
-}
-
-class LiveRoom {
-  LiveRoom({
-    this.roomStatus,
-    this.liveStatus,
-    this.url,
-    this.title,
-    this.cover,
-    this.roomId,
-    this.roundStatus,
-    this.watchedShow,
-  });
-
-  int? roomStatus;
-  int? liveStatus;
-  String? url;
-  String? title;
-  String? cover;
-  int? roomId;
-  int? roundStatus;
-  Map? watchedShow;
-
-  LiveRoom.fromJson(Map<String, dynamic> json) {
-    roomStatus = json['roomStatus'];
-    liveStatus = json['liveStatus'];
-    url = json['url'];
-    title = json['title'];
-    cover = json['cover'];
-    roomId = json['roomid'];
-    roundStatus = json['roundStatus'];
-    watchedShow = json['watched_show'];
   }
 }

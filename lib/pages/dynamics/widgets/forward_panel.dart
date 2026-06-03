@@ -7,8 +7,6 @@ import 'package:pilipala/utils/utils.dart';
 
 import 'additional_panel.dart';
 import 'article_panel.dart';
-import 'live_panel.dart';
-import 'live_rcmd_panel.dart';
 import 'pic_panel.dart';
 import 'rich_node_panel.dart';
 import 'video_panel.dart';
@@ -102,12 +100,6 @@ Widget forWard(item, context, ctr, source, {floor = 1}) {
           child: forWard(item.orig, context, ctr, source, floor: floor + 1),
         ),
       );
-    // 直播
-    case 'DYNAMIC_TYPE_LIVE_RCMD':
-      return liveRcmdPanel(item, context, floor: floor);
-    // 直播
-    case 'DYNAMIC_TYPE_LIVE':
-      return livePanel(item, context, floor: floor);
     // 合集
     case 'DYNAMIC_TYPE_UGC_SEASON':
       return videoSeasonWidget(item, context, 'ugcSeason');

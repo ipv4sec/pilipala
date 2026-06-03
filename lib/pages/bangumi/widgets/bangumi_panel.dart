@@ -193,7 +193,7 @@ class _BangumiPanelState extends State<BangumiPanel> {
                           Row(
                             children: [
                               if (isSelected) ...<Widget>[
-                                Image.asset('assets/images/live.png',
+                                Image.asset('assets/images/playing.gif',
                                     color: primary, height: 12),
                                 const SizedBox(width: 6)
                               ],

@@ -13,7 +13,7 @@ class SearchResultController extends GetxController {
     if (Get.parameters.keys.isNotEmpty) {
       keyword = Get.parameters['keyword'];
     }
-    searchTabs.value = SearchType.values
+    searchTabs.value = searchTypes
         .map((type) => {'label': type.label, 'id': type.type})
         .toList();
     querySearchCount();

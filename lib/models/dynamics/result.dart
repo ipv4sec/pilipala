@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class DynamicsDataModel {
   DynamicsDataModel({
     this.hasMore,
@@ -409,8 +407,6 @@ class DynamicMajorModel {
     this.ugcSeason,
     this.opus,
     this.pgc,
-    this.liveRcmd,
-    this.live,
     this.none,
     this.type,
     this.courses,
@@ -423,8 +419,6 @@ class DynamicMajorModel {
   DynamicArchiveModel? ugcSeason;
   DynamicOpusModel? opus;
   DynamicArchiveModel? pgc;
-  DynamicLiveModel? liveRcmd;
-  DynamicLive2Model? live;
   DynamicNoneModel? none;
   // MAJOR_TYPE_DRAW 图片
   // MAJOR_TYPE_ARCHIVE 视频
@@ -447,11 +441,6 @@ class DynamicMajorModel {
         json['opus'] != null ? DynamicOpusModel.fromJson(json['opus']) : null;
     pgc =
         json['pgc'] != null ? DynamicArchiveModel.fromJson(json['pgc']) : null;
-    liveRcmd = json['live_rcmd'] != null
-        ? DynamicLiveModel.fromJson(json['live_rcmd'])
-        : null;
-    live =
-        json['live'] != null ? DynamicLive2Model.fromJson(json['live']) : null;
     none =
         json['none'] != null ? DynamicNoneModel.fromJson(json['none']) : null;
     type = json['type'];
@@ -684,84 +673,6 @@ class DynamicDrawItemModel {
     src = json['src'];
     tags = json['tags'];
     width = json['width'];
-  }
-}
-
-class DynamicLiveModel {
-  DynamicLiveModel({
-    this.content,
-  });
-
-  String? content;
-  int? type;
-  Map? livePlayInfo;
-  int? uid;
-  String? parentAreaName;
-  int? roomId;
-  String? liveId;
-  int? liveStatus;
-  String? cover;
-  int? online;
-  String? areaName;
-  String? title;
-  int? liveStartTime;
-  Map? watchedShow;
-
-  DynamicLiveModel.fromJson(Map<String, dynamic> json) {
-    content = json['content'];
-    if (json['content'] != null) {
-      Map<String, dynamic> data = jsonDecode(json['content']);
-
-      type = data['type'];
-      Map livePlayInfo = data['live_play_info'];
-      uid = livePlayInfo['uid'];
-      parentAreaName = livePlayInfo['parent_area_name'];
-      roomId = livePlayInfo['room_id'];
-      liveId = livePlayInfo['live_id'];
-      liveStatus = livePlayInfo['live_status'];
-      cover = livePlayInfo['cover'];
-      online = livePlayInfo['online'];
-      areaName = livePlayInfo['area_name'];
-      title = livePlayInfo['title'];
-      liveStartTime = livePlayInfo['live_start_time'];
-      watchedShow = livePlayInfo['watched_show'];
-    }
-  }
-}
-
-class DynamicLive2Model {
-  DynamicLive2Model({
-    this.badge,
-    this.cover,
-    this.descFirst,
-    this.descSecond,
-    this.id,
-    this.jumpUrl,
-    this.liveState,
-    this.reserveType,
-    this.title,
-  });
-
-  Map? badge;
-  String? cover;
-  String? descFirst;
-  String? descSecond;
-  int? id;
-  String? jumpUrl;
-  int? liveState;
-  int? reserveType;
-  String? title;
-
-  DynamicLive2Model.fromJson(Map<String, dynamic> json) {
-    badge = json['badge'];
-    cover = json['cover'];
-    descFirst = json['desc_first'];
-    descSecond = json['desc_second'];
-    id = json['id'];
-    jumpUrl = json['jump_url'];
-    liveState = json['liv_state'];
-    reserveType = json['reserve_type'];
-    title = json['title'];
   }
 }
 

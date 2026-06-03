@@ -73,9 +73,7 @@ class HistorySearchController extends GetxController {
 
   Future delHistory(kid, business) async {
     String resKid = 'archive_$kid';
-    if (business == 'live') {
-      resKid = 'live_$kid';
-    } else if (business.contains('article')) {
+    if (business.contains('article')) {
       resKid = 'article_$kid';
     }
 

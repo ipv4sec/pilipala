@@ -68,7 +68,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   void setTabConfig() async {
     defaultTabs = [...tabsConfig];
     tabbarSort = settingStorage.get(SettingBoxKey.tabbarSort,
-        defaultValue: ['live', 'rcmd', 'hot', 'bangumi']);
+        defaultValue: ['rcmd', 'hot']);
     defaultTabs.retainWhere(
         (item) => tabbarSort.contains((item['type'] as TabType).id));
     defaultTabs.sort((a, b) => tabbarSort

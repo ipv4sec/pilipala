@@ -3,15 +3,12 @@
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pilipala/common/skeleton/media_bangumi.dart';
 import 'package:pilipala/common/skeleton/video_card_h.dart';
 import 'package:pilipala/common/widgets/http_error.dart';
 import 'package:pilipala/models/common/search_type.dart';
 
 import 'controller.dart';
 import 'widgets/article_panel.dart';
-import 'widgets/live_panel.dart';
-import 'widgets/media_bangumi_panel.dart';
 import 'widgets/user_panel.dart';
 import 'widgets/video_panel.dart';
 
@@ -93,12 +90,8 @@ class _SearchPanelState extends State<SearchPanel>
                         ctr: _searchPanelController,
                         list: list.value,
                       );
-                    case SearchType.media_bangumi:
-                      return searchMbangumiPanel(context, ctr, list);
                     case SearchType.bili_user:
                       return searchUserPanel(context, ctr, list);
-                    case SearchType.live_room:
-                      return searchLivePanel(context, ctr, list);
                     case SearchType.article:
                       return SearchArticlePanel(
                         ctr: _searchPanelController,
@@ -145,18 +138,7 @@ class _SearchPanelState extends State<SearchPanel>
               addRepaintBoundaries: false,
               itemCount: 15,
               itemBuilder: (context, index) {
-                switch (widget.searchType) {
-                  case SearchType.video:
-                    return const VideoCardHSkeleton();
-                  case SearchType.media_bangumi:
-                    return const MediaBangumiSkeleton();
-                  case SearchType.bili_user:
-                    return const VideoCardHSkeleton();
-                  case SearchType.live_room:
-                    return const VideoCardHSkeleton();
-                  default:
-                    return const VideoCardHSkeleton();
-                }
+                return const VideoCardHSkeleton();
               },
             );
           }

@@ -66,13 +66,6 @@ class PiliSchame {
             SmartDialog.showToast('投稿匹配失败');
           }
           break;
-        case 'live':
-          final String roomId = path.split('/').last;
-          Get.toNamed<dynamic>(
-            '/liveRoom?roomid=$roomId',
-            arguments: <String, String?>{'liveItem': null, 'heroTag': roomId},
-          );
-          break;
         case 'bangumi':
           if (path.startsWith('/season')) {
             final String seasonId = path.split('/').last;
@@ -181,12 +174,6 @@ class PiliSchame {
       } else if (path.startsWith('/av')) {
         _videoPush(Utils.matchNum(path.split('?').first).first, null);
       }
-    } else if (host.contains('live')) {
-      int roomId = int.parse(path!.split('/').last);
-      Get.toNamed(
-        '/liveRoom?roomid=$roomId',
-        arguments: {'liveItem': null, 'heroTag': roomId.toString()},
-      );
     } else if (host.contains('space')) {
       var mid = path!.split('/').last;
       Get.toNamed('/member?mid=$mid', arguments: {'face': ''});

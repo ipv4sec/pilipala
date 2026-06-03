@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pilipala/common/widgets/network_img_layer.dart';
 import 'package:pilipala/models/dynamics/up.dart';
-import 'package:pilipala/models/live/item.dart';
 import 'package:pilipala/utils/feed_back.dart';
 import 'package:pilipala/utils/utils.dart';
 
@@ -26,37 +25,17 @@ class _UpPanelState extends State<UpPanel> {
   int currentMid = -1;
   late double contentWidth = 56;
   List<UpItem> upList = [];
-  List<LiveUserItem> liveList = [];
   static const itemPadding = EdgeInsets.symmetric(horizontal: 5, vertical: 0);
   late MyInfo userInfo;
 
   void listFormat() {
     userInfo = widget.upData.myInfo!;
     upList = widget.upData.upList!;
-    liveList = widget.upData.liveList!;
   }
 
   void onClickUp(data, i) {
     currentMid = data.mid;
     widget.onClickUpCb?.call(data);
-    // int liveLen = liveList.length;
-    // int upLen = upList.length;
-    // double itemWidth = contentWidth + itemPadding.horizontal;
-    // double screenWidth = MediaQuery.sizeOf(context).width;
-    // double moveDistance = 0.0;
-    // if (itemWidth * (upList.length + liveList.length) <= screenWidth) {
-    // } else if ((upLen - i - 0.5) * itemWidth > screenWidth / 2) {
-    //   moveDistance = (i + liveLen + 0.5) * itemWidth + 46 - screenWidth / 2;
-    // } else {
-    //   moveDistance = (upLen + liveLen) * itemWidth + 46 - screenWidth;
-    // }
-    // data.hasUpdate = false;
-    // scrollController.animateTo(
-    //   moveDistance,
-    //   duration: const Duration(milliseconds: 200),
-    //   curve: Curves.linear,
-    // );
-    // setState(() {});
   }
 
   @override
@@ -66,7 +45,7 @@ class _UpPanelState extends State<UpPanel> {
       floating: true,
       pinned: false,
       delegate: _SliverHeaderDelegate(
-          height: liveList.isNotEmpty || upList.isNotEmpty ? 126 : 0,
+          height: upList.isNotEmpty ? 126 : 0,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,20 +86,6 @@ class _UpPanelState extends State<UpPanel> {
                         controller: scrollController,
                         children: [
                           const SizedBox(width: 10),
-                          if (liveList.isNotEmpty) ...[
-                            for (int i = 0; i < liveList.length; i++) ...[
-                              upItemBuild(liveList[i], i)
-                            ],
-                            VerticalDivider(
-                              indent: 20,
-                              endIndent: 40,
-                              width: 26,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withOpacity(0.5),
-                            ),
-                          ],
                           for (int i = 0; i < upList.length; i++) ...[
                             upItemBuild(upList[i], i)
                           ],
@@ -153,17 +118,6 @@ class _UpPanelState extends State<UpPanel> {
               () {
             onClickUp(data, i);
           });
-        } else if (data.type == 'live') {
-          LiveItemModel liveItem = LiveItemModel.fromJson({
-            'title': data.title,
-            'uname': data.uname,
-            'face': data.face,
-            'roomid': data.roomId,
-          });
-          Get.toNamed(
-            '/liveRoom?roomid=${data.roomId}',
-            arguments: {'liveItem': liveItem},
-          );
         }
       },
       onLongPress: () {
@@ -187,17 +141,11 @@ class _UpPanelState extends State<UpPanel> {
             children: [
               Badge(
                 smallSize: 8,
-                label: data.type == 'live' ? const Text('Live') : null,
-                textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-                alignment: data.type == 'live'
-                    ? AlignmentDirectional.topCenter
-                    : AlignmentDirectional.topEnd,
+                alignment: AlignmentDirectional.topEnd,
                 padding: const EdgeInsets.only(left: 6, right: 6),
-                isLabelVisible: data.type == 'live' ||
-                    (data.type == 'up' && (data.hasUpdate ?? false)),
-                backgroundColor: data.type == 'live'
-                    ? Theme.of(context).colorScheme.secondaryContainer
-                    : Theme.of(context).colorScheme.primary,
+                isLabelVisible:
+                    data.type == 'up' && (data.hasUpdate ?? false),
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 child: data.face != ''
                     ? NetworkImgLayer(
                         width: 50,

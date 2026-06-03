@@ -84,7 +84,6 @@ class HisListItem {
     this.isFav,
     this.kid,
     this.tagName,
-    this.liveStatus,
     this.checked,
   });
 
@@ -111,7 +110,6 @@ class HisListItem {
   int? isFav;
   int? kid;
   String? tagName;
-  int? liveStatus;
   bool? checked;
 
   HisListItem.fromJson(Map<String, dynamic> json) {
@@ -138,7 +136,6 @@ class HisListItem {
     isFav = json['is_fav'];
     kid = json['kid'];
     tagName = json['tag_name'];
-    liveStatus = json['live_status'];
     checked = false;
   }
 }

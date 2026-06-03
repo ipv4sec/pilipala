@@ -9,7 +9,6 @@ import 'package:pilipala/http/user.dart';
 import 'package:pilipala/http/video.dart';
 import 'package:pilipala/models/common/business_type.dart';
 import 'package:pilipala/models/common/search_type.dart';
-import 'package:pilipala/models/live/item.dart';
 import 'package:pilipala/pages/history_search/index.dart';
 import 'package:pilipala/utils/feed_back.dart';
 import 'package:pilipala/utils/id_utils.dart';
@@ -56,23 +55,6 @@ class HistoryItem extends StatelessWidget {
               'articleType': 'read',
             },
           );
-        } else if (videoItem.history.business == 'live') {
-          if (videoItem.liveStatus == 1) {
-            LiveItemModel liveItem = LiveItemModel.fromJson({
-              'face': videoItem.authorFace,
-              'roomid': videoItem.history.oid,
-              'pic': videoItem.cover,
-              'title': videoItem.title,
-              'uname': videoItem.authorName,
-              'cover': videoItem.cover,
-            });
-            Get.toNamed(
-              '/liveRoom?roomid=${videoItem.history.oid}',
-              arguments: {'liveItem': liveItem},
-            );
-          } else {
-            SmartDialog.showToast('直播未开播');
-          }
         } else if (videoItem.badge == '番剧' ||
             videoItem.tagName.contains('动画')) {
           /// hack
@@ -179,9 +161,7 @@ class HistoryItem extends StatelessWidget {
                                     // 右上角
                                     if (BusinessType.showBadge.showBadge
                                             .contains(
-                                                videoItem.history.business) ||
-                                        videoItem.history.business ==
-                                            BusinessType.live.type)
+                                                videoItem.history.business))
                                       PBadge(
                                         text: videoItem.badge,
                                         top: 6.0,
@@ -361,7 +341,6 @@ class VideoContent extends StatelessWidget {
                         <PopupMenuEntry<String>>[
                       if (videoItem.badge != '番剧' &&
                           !videoItem.tagName.contains('动画') &&
-                          videoItem.history.business != 'live' &&
                           !videoItem.history.business.contains('article'))
                         PopupMenuItem<String>(
                           onTap: () async {

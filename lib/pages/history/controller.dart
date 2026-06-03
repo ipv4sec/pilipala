@@ -137,6 +137,7 @@ class HistoryController extends GetxController {
   Future delHistory(kid, business) async {
     String resKid = 'archive_$kid';
     if (business == 'live') {
+      // 直播记录仍需正确的key格式来删除
       resKid = 'live_$kid';
     } else if (business.contains('article')) {
       resKid = 'article_$kid';

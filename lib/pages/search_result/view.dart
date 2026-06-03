@@ -24,7 +24,7 @@ class _SearchResultPageState extends State<SearchResultPage>
 
     _tabController = TabController(
       vsync: this,
-      length: SearchType.values.length,
+      length: searchTypes.length,
       initialIndex: _searchResultController.tabIndex,
     );
   }
@@ -89,7 +89,7 @@ class _SearchResultPageState extends State<SearchResultPage>
                   onTap: (index) {
                     if (index == _searchResultController.tabIndex) {
                       Get.find<SearchPanelController>(
-                              tag: SearchType.values[index].type +
+                              tag: searchTypes[index].type +
                                   _searchResultController.keyword!)
                           .animateToTop();
                     }
@@ -104,7 +104,7 @@ class _SearchResultPageState extends State<SearchResultPage>
             child: TabBarView(
               controller: _tabController,
               children: [
-                for (var i in SearchType.values) ...{
+                for (var i in searchTypes) ...{
                   SearchPanel(
                     keyword: _searchResultController.keyword,
                     searchType: i,

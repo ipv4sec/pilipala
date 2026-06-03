@@ -214,7 +214,6 @@ flutter:
     - assets/images/
     - assets/images/lv/
     - assets/images/logo/
-    - assets/images/live/
     - assets/images/video/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

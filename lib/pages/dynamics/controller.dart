@@ -9,7 +9,6 @@ import 'package:pilipala/http/search.dart';
 import 'package:pilipala/models/common/dynamics_type.dart';
 import 'package:pilipala/models/dynamics/result.dart';
 import 'package:pilipala/models/dynamics/up.dart';
-import 'package:pilipala/models/live/item.dart';
 import 'package:pilipala/utils/feed_back.dart';
 import 'package:pilipala/utils/id_utils.dart';
 import 'package:pilipala/utils/route_push.dart';
@@ -189,24 +188,6 @@ class DynamicsController extends GetxController {
         Get.toNamed('/dynamicDetail',
             arguments: {'item': item, 'floor': floor});
         break;
-      case 'DYNAMIC_TYPE_LIVE_RCMD':
-        DynamicLiveModel liveRcmd = item.modules.moduleDynamic.major.liveRcmd;
-        ModuleAuthorModel author = item.modules.moduleAuthor;
-        LiveItemModel liveItem = LiveItemModel.fromJson({
-          'title': liveRcmd.title,
-          'uname': author.name,
-          'cover': liveRcmd.cover,
-          'mid': author.mid,
-          'face': author.face,
-          'roomid': liveRcmd.roomId,
-          'watched_show': liveRcmd.watchedShow,
-        });
-        Get.toNamed('/liveRoom?roomid=${liveItem.roomId}', arguments: {
-          'liveItem': liveItem,
-          'heroTag': liveItem.roomId.toString()
-        });
-        break;
-
       /// 合集查看
       case 'DYNAMIC_TYPE_UGC_SEASON':
         DynamicArchiveModel ugcSeason =
@@ -236,7 +217,6 @@ class DynamicsController extends GetxController {
     }
     if (type == 'init') {
       upData.value.upList = <UpItem>[];
-      upData.value.liveList = <LiveUserItem>[];
     }
     var res = await DynamicsHttp.followUp();
     if (res['status']) {

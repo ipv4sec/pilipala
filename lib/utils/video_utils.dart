@@ -1,7 +1,5 @@
 import 'package:pilipala/models/video/play/url.dart';
 
-import '../models/live/room_info.dart';
-
 class VideoUtils {
   static String getCdnUrl(dynamic item) {
     var backupUrl = "";
@@ -13,11 +11,6 @@ class VideoUtils {
       videoUrl = backupUrl.contains("http") ? backupUrl : (item.baseUrl ?? "");
     } else if (item is AudioItem) {
       backupUrl = item.backupUrl ?? "";
-      videoUrl = backupUrl.contains("http") ? backupUrl : (item.baseUrl ?? "");
-    } else if (item is CodecItem) {
-      backupUrl = (item.urlInfo?.first.host)! +
-          item.baseUrl! +
-          item.urlInfo!.first.extra!;
       videoUrl = backupUrl.contains("http") ? backupUrl : (item.baseUrl ?? "");
     } else {
       return "";

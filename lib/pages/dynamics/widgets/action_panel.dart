@@ -125,10 +125,6 @@ class _ActionPanelState extends State<ActionPanel>
           case 'DYNAMIC_TYPE_WORD':
             cover = '';
 
-          /// 直播
-          case 'DYNAMIC_TYPE_LIVE_RCMD':
-            cover = '';
-
           /// 合集查看
           case 'DYNAMIC_TYPE_UGC_SEASON':
             cover = '';
@@ -151,10 +147,6 @@ class _ActionPanelState extends State<ActionPanel>
 
       /// 纯文字动态
       case 'DYNAMIC_TYPE_WORD':
-        cover = '';
-
-      /// 直播
-      case 'DYNAMIC_TYPE_LIVE_RCMD':
         cover = '';
 
       /// 合集查看
