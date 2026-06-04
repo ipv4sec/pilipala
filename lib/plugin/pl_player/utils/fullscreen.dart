@@ -1,4 +1,3 @@
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -28,13 +27,9 @@ Future<void> enterFullScreen() async {
 
 //退出全屏显示
 Future<void> exitFullScreen() async {
-  late SystemUiMode mode = SystemUiMode.edgeToEdge;
   try {
-    if ((await DeviceInfoPlugin().androidInfo).version.sdkInt < 29) {
-      mode = SystemUiMode.manual;
-    }
     await SystemChrome.setEnabledSystemUIMode(
-      mode,
+      SystemUiMode.edgeToEdge,
       overlays: SystemUiOverlay.values,
     );
     await SystemChrome.setPreferredOrientations([]);
