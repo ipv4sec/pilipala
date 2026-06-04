@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -294,8 +292,7 @@ class _StyleSettingState extends State<StyleSetting> {
           //   onTap: () => Get.toNamed('/actionMenuSet'),
           //   title: Text('操作菜单设置', style: titleStyle),
           // ),
-          if (Platform.isAndroid)
-            ListTile(
+          ListTile(
               dense: false,
               onTap: () => Get.toNamed('/displayModeSetting'),
               title: Text('屏幕帧率', style: titleStyle),

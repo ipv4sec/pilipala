@@ -329,23 +329,21 @@ class Utils {
     await SmartDialog.dismiss();
     // 获取设备信息
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      // [arm64-v8a]
-      String abi = androidInfo.supportedAbis.first;
-      late String downloadUrl;
-      if (data.assets.isNotEmpty) {
-        for (var i in data.assets) {
-          if (i.downloadUrl.contains(abi)) {
-            downloadUrl = i.downloadUrl;
-          }
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    // [arm64-v8a]
+    String abi = androidInfo.supportedAbis.first;
+    late String downloadUrl;
+    if (data.assets.isNotEmpty) {
+      for (var i in data.assets) {
+        if (i.downloadUrl.contains(abi)) {
+          downloadUrl = i.downloadUrl;
         }
-        // 应用外下载
-        launchUrl(
-          Uri.parse(downloadUrl),
-          mode: LaunchMode.externalApplication,
-        );
       }
+      // 应用外下载
+      launchUrl(
+        Uri.parse(downloadUrl),
+        mode: LaunchMode.externalApplication,
+      );
     }
   }
 

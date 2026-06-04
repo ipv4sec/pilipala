@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,16 +39,12 @@ class _RankPageState extends State<RankPage>
         toolbarHeight: 0,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        systemOverlayStyle: Platform.isAndroid
-            ? SystemUiOverlayStyle(
+        systemOverlayStyle: SystemUiOverlayStyle(
                 statusBarIconBrightness:
                     Theme.of(context).brightness == Brightness.dark
                         ? Brightness.light
                         : Brightness.dark,
-              )
-            : Theme.of(context).brightness == Brightness.dark
-                ? SystemUiOverlayStyle.light
-                : SystemUiOverlayStyle.dark,
+              ),
       ),
       body: Column(
         children: [

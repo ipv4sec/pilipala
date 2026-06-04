@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:async';
+import 'dart:developer';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
@@ -51,17 +52,15 @@ void main() async {
   );
 
   // 小白条、导航栏沉浸
-  if (Platform.isAndroid) {
-    final androidInfo = await DeviceInfoPlugin().androidInfo;
-    if (androidInfo.version.sdkInt >= 29) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    }
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
-      statusBarColor: Colors.transparent,
-    ));
+  final androidInfo = await DeviceInfoPlugin().androidInfo;
+  if (androidInfo.version.sdkInt >= 29) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarDividerColor: Colors.transparent,
+    statusBarColor: Colors.transparent,
+  ));
 
   PiliSchame.init();
   await GlobalDataCache().initialize();
@@ -89,36 +88,26 @@ class MyApp extends StatelessWidget {
         setting.get(SettingBoxKey.defaultTextScale, defaultValue: 1.0);
 
     // 强制设置高帧率
-    if (Platform.isAndroid) {
-      try {
-        late List modes;
-        FlutterDisplayMode.supported.then((value) {
-          modes = value;
-          var storageDisplay = setting.get(SettingBoxKey.displayMode);
-          DisplayMode f = DisplayMode.auto;
-          if (storageDisplay != null) {
-            f = modes.firstWhere((e) => e.toString() == storageDisplay);
-          }
-          DisplayMode preferred = modes.toList().firstWhere((el) => el == f);
-          FlutterDisplayMode.setPreferredMode(preferred);
-        });
-      } catch (_) {}
-    }
+    try {
+      late List modes;
+      FlutterDisplayMode.supported.then((value) {
+        modes = value;
+        var storageDisplay = setting.get(SettingBoxKey.displayMode);
+        DisplayMode f = DisplayMode.auto;
+        if (storageDisplay != null) {
+          f = modes.firstWhere((e) => e.toString() == storageDisplay);
+        }
+        DisplayMode preferred = modes.toList().firstWhere((el) => el == f);
+        FlutterDisplayMode.setPreferredMode(preferred);
+      });
+    } catch (_) {}
 
-    if (Platform.isAndroid) {
-      return AndroidApp(
-        brandColor: brandColor,
-        isDynamicColor: isDynamicColor,
-        currentThemeValue: currentThemeValue,
-        textScale: textScale,
-      );
-    } else {
-      return OtherApp(
-        brandColor: brandColor,
-        currentThemeValue: currentThemeValue,
-        textScale: textScale,
-      );
-    }
+    return AndroidApp(
+      brandColor: brandColor,
+      isDynamicColor: isDynamicColor,
+      currentThemeValue: currentThemeValue,
+      textScale: textScale,
+    );
   }
 }
 
@@ -164,35 +153,6 @@ class AndroidApp extends StatelessWidget {
           textScale: textScale,
         );
       }),
-    );
-  }
-}
-
-class OtherApp extends StatelessWidget {
-  const OtherApp({
-    super.key,
-    required this.brandColor,
-    required this.currentThemeValue,
-    required this.textScale,
-  });
-
-  final Color brandColor;
-  final ThemeType currentThemeValue;
-  final double textScale;
-
-  @override
-  Widget build(BuildContext context) {
-    return BuildMainApp(
-      lightColorScheme: ColorScheme.fromSeed(
-        seedColor: brandColor,
-        brightness: Brightness.light,
-      ),
-      darkColorScheme: ColorScheme.fromSeed(
-        seedColor: brandColor,
-        brightness: Brightness.dark,
-      ),
-      currentThemeValue: currentThemeValue,
-      textScale: textScale,
     );
   }
 }

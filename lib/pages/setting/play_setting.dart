@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -109,8 +107,7 @@ class _PlaySettingState extends State<PlaySetting> {
             setKey: SettingBoxKey.enableBackgroundPlay,
             defaultVal: false,
           ),
-          if (Platform.isAndroid)
-            const SetSwitchItem(
+          const SetSwitchItem(
               title: '自动PiP播放',
               subTitle: '进入后台时画中画播放',
               setKey: SettingBoxKey.autoPiP,

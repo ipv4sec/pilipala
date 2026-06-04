@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -145,9 +144,7 @@ class VideoDetailController extends GetxController
     danmakuCid.value = cid.value;
 
     ///
-    if (Platform.isAndroid) {
-      floating = Floating();
-    }
+    floating = Floating();
 
     // CDN优化
     enableCDN = setting.get(SettingBoxKey.enableCDN, defaultValue: true);

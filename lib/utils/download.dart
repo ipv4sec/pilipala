@@ -38,16 +38,14 @@ class DownloadUtils {
   static Future<bool> downloadImg(String imgUrl,
       {String imgType = 'cover'}) async {
     try {
-      if (Platform.isAndroid) {
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
-        if (androidInfo.version.sdkInt <= 32) {
-          if (!await requestStoragePer()) {
-            return false;
-          }
-        } else {
-          if (!await requestPhotoPer()) {
-            return false;
-          }
+      final androidInfo = await DeviceInfoPlugin().androidInfo;
+      if (androidInfo.version.sdkInt <= 32) {
+        if (!await requestStoragePer()) {
+          return false;
+        }
+      } else {
+        if (!await requestPhotoPer()) {
+          return false;
         }
       }
 

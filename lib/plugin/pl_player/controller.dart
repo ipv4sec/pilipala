@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:easy_debounce/easy_throttle.dart';
@@ -22,7 +21,6 @@ import 'package:pilipala/utils/global_data_cache.dart';
 import 'package:pilipala/utils/storage.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import 'package:universal_platform/universal_platform.dart';
 import '../../models/video/subTitile/content.dart';
 import '../../models/video/subTitile/result.dart';
 // import 'package:wakelock_plus/wakelock_plus.dart';
@@ -422,16 +420,14 @@ class PlPlayerController {
     // 解除倍速限制
     await pp.setProperty("af", "scaletempo2=max-speed=8");
     //  音量不一致
-    if (Platform.isAndroid) {
-      await pp.setProperty("volume-max", "100");
-      String defaultAoOutput =
-          setting.get(SettingBoxKey.defaultAoOutput, defaultValue: '0');
-      await pp.setProperty(
-          "ao",
-          aoOutputList
-              .where((e) => e['value'] == defaultAoOutput)
-              .first['title']);
-    }
+    await pp.setProperty("volume-max", "100");
+    String defaultAoOutput =
+        setting.get(SettingBoxKey.defaultAoOutput, defaultValue: '0');
+    await pp.setProperty(
+        "ao",
+        aoOutputList
+            .where((e) => e['value'] == defaultAoOutput)
+            .first['title']);
 
     await player.setAudioTrack(
       AudioTrack.auto(),
@@ -441,9 +437,7 @@ class PlPlayerController {
     if (dataSource.audioSource != '' && dataSource.audioSource != null) {
       await pp.setProperty(
         'audio-files',
-        UniversalPlatform.isWindows
-            ? dataSource.audioSource!.replaceAll(';', '\\;')
-            : dataSource.audioSource!.replaceAll(':', '\\:'),
+        dataSource.audioSource!.replaceAll(':', '\\:'),
       );
     } else {
       await pp.setProperty(

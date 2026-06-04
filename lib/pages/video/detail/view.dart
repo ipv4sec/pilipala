@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:floating/floating.dart';
@@ -102,9 +101,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     videoSourceInit();
     appbarStreamListen();
     fullScreenStatusListener();
-    if (Platform.isAndroid) {
-      floating = vdCtr.floating!;
-    }
+    floating = vdCtr.floating!;
     WidgetsBinding.instance.addObserver(this);
     lifecycleListener();
   }
@@ -166,10 +163,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         }
       } catch (_) {}
     }
-    if (Platform.isAndroid) {
-      floating.toggleAutoPip(
-          autoEnter: status == PlayerStatus.playing && autoPiP);
-    }
+    floating.toggleAutoPip(
+        autoEnter: status == PlayerStatus.playing && autoPiP);
   }
 
   // 继续播放或重新播放
@@ -233,10 +228,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       vdCtr.floating!.dispose();
     }
     videoPlayerServiceHandler.onVideoDetailDispose();
-    if (Platform.isAndroid) {
-      floating.toggleAutoPip(autoEnter: false);
-      floating.dispose();
-    }
+    floating.toggleAutoPip(autoEnter: false);
+    floating.dispose();
     appbarStream.close();
     WidgetsBinding.instance.removeObserver(this);
     _lifecycleListener.dispose();
@@ -835,15 +828,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       ),
     );
 
-    if (Platform.isAndroid) {
-      return PiPSwitcher(
-        childWhenDisabled: childWhenDisabled,
-        childWhenEnabled: buildVideoPlayerPanel(),
-        floating: floating,
-      );
-    } else {
-      return childWhenDisabled;
-    }
+    return PiPSwitcher(
+      childWhenDisabled: childWhenDisabled,
+      childWhenEnabled: buildVideoPlayerPanel(),
+      floating: floating,
+    );
   }
 
   Widget buildCustomAppBar() {

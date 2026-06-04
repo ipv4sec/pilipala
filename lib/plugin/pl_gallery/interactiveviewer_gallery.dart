@@ -114,10 +114,8 @@ class _InteractiveviewerGalleryState extends State<InteractiveviewerGallery>
   }
 
   setStatusBar() async {
-    if (Platform.isIOS || Platform.isAndroid) {
-      await StatusBarControl.setHidden(true,
-          animation: StatusBarAnimation.FADE);
-    }
+    await StatusBarControl.setHidden(true,
+        animation: StatusBarAnimation.FADE);
   }
 
   @override

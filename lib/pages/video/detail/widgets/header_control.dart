@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:floating/floating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1294,7 +1292,7 @@ class _HeaderControlState extends State<HeaderControl> {
             ),
           ],
           SizedBox(width: buttonSpace),
-          if (Platform.isAndroid) ...<Widget>[
+          ...<Widget>[
             SizedBox(
               width: 34,
               height: 34,

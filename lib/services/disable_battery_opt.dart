@@ -1,12 +1,7 @@
-import 'dart:io';
-
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:pilipala/utils/storage.dart';
 
 void DisableBatteryOpt() async {
-  if (!Platform.isAndroid) {
-    return;
-  }
   // 本地缓存中读取 是否禁用了电池优化 默认未禁用
   bool isDisableBatteryOptLocal =
       GStrorage.localCache.get('isDisableBatteryOptLocal', defaultValue: false);
