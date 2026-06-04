@@ -11,6 +11,7 @@ import 'package:pilipala/pages/rank/index.dart';
 import 'package:pilipala/utils/event_bus.dart';
 import 'package:pilipala/utils/feed_back.dart';
 import 'package:pilipala/utils/storage.dart';
+import 'package:pilipala/utils/tv.dart';
 import './controller.dart';
 
 class MainApp extends StatefulWidget {
@@ -125,6 +126,79 @@ class _MainAppState extends State<MainApp> with SingleTickerProviderStateMixin {
         MediaQuery.sizeOf(context).width * 9 / 16;
     localCache.put('sheetHeight', sheetHeight);
     localCache.put('statusBarHeight', statusBarHeight);
+
+    if (isTV) {
+      return _buildTVLayout(context);
+    }
+    return _buildMobileLayout(context);
+  }
+
+  /// TV 布局：左侧 NavigationRail + 右侧 PageView
+  Widget _buildTVLayout(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        _mainController.onBackPressed(context);
+      },
+      child: Scaffold(
+        body: Row(
+          children: [
+            // 侧边导航栏
+            Obx(
+              () => NavigationRail(
+                selectedIndex: _mainController.selectedIndex,
+                onDestinationSelected: (value) => setIndex(value),
+                labelType: NavigationRailLabelType.all,
+                leading: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Icon(
+                    Icons.play_circle_filled,
+                    size: 36,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                destinations: <Widget>[
+                  ..._mainController.navigationBars.map((e) {
+                    return NavigationRailDestination(
+                      icon: Badge(
+                        label: _mainController.dynamicBadgeType.value ==
+                                DynamicBadgeMode.number
+                            ? Text(e['count'].toString())
+                            : null,
+                        padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
+                        isLabelVisible:
+                            _mainController.dynamicBadgeType.value !=
+                                    DynamicBadgeMode.hidden &&
+                                e['count'] > 0,
+                        child: e['icon'],
+                      ),
+                      selectedIcon: e['selectIcon'],
+                      label: Text(e['label']),
+                    );
+                  }).toList(),
+                ],
+              ),
+            ),
+            // 内容区域
+            Expanded(
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _mainController.pageController,
+                onPageChanged: (index) {
+                  _mainController.selectedIndex = index;
+                  setState(() {});
+                },
+                children: _mainController.pages,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 手机布局：底部导航栏（保持原样）
+  Widget _buildMobileLayout(BuildContext context) {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) async {

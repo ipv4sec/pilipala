@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:pilipala/utils/tv.dart';
 import 'package:floating/floating.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -829,9 +830,32 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
 
     return PiPSwitcher(
-      childWhenDisabled: childWhenDisabled,
+      childWhenDisabled: isTV ? _buildTVDetailLayout(childWhenDisabled) : childWhenDisabled,
       childWhenEnabled: buildVideoPlayerPanel(),
       floating: floating,
+    );
+  }
+
+  /// TV 横屏布局：左侧视频 + 右侧信息/评论
+  Widget _buildTVDetailLayout(Widget originalLayout) {
+    if (!isTV) return originalLayout;
+
+    // TV 上使用 Row 布局：左侧视频区，右侧信息区
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Row(
+        children: [
+          // 左侧：视频播放区（16:9 比例）
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: buildVideoPlayerPanel(),
+          ),
+          // 右侧：视频信息和评论区
+          Expanded(
+            child: originalLayout,
+          ),
+        ],
+      ),
     );
   }
 

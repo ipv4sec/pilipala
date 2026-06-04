@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ import 'package:pilipala/plugin/pl_player/models/fullscreen_mode.dart';
 import 'package:pilipala/plugin/pl_player/utils.dart';
 import 'package:pilipala/utils/feed_back.dart';
 import 'package:pilipala/utils/storage.dart';
+import 'package:pilipala/utils/tv.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
 import '../../utils/global_data_cache.dart';
@@ -387,9 +389,10 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
       color: Colors.white,
       fontSize: 12,
     );
-    return Stack(
-      fit: StackFit.passthrough,
-      children: <Widget>[
+    return _buildTVShortcuts(
+      Stack(
+        fit: StackFit.passthrough,
+        children: <Widget>[
         Obx(
           () => Video(
             key: ValueKey(_.videoFit.value),
@@ -952,6 +955,189 @@ class _PLVideoPlayerState extends State<PLVideoPlayer>
           ),
         ),
       ],
+      ),
     );
+  }
+
+  /// TV D-Pad 快捷键映射
+  Widget _buildTVShortcuts(Widget child) {
+    if (!isTV) return child;
+
+    return Shortcuts(
+      shortcuts: <LogicalKeySet, Intent>{
+        LogicalKeySet(LogicalKeyboardKey.select): const _PlayPauseIntent(),
+        LogicalKeySet(LogicalKeyboardKey.enter): const _PlayPauseIntent(),
+        LogicalKeySet(LogicalKeyboardKey.space): const _PlayPauseIntent(),
+        LogicalKeySet(LogicalKeyboardKey.arrowLeft): const _SeekBackwardIntent(),
+        LogicalKeySet(LogicalKeyboardKey.arrowRight): const _SeekForwardIntent(),
+        LogicalKeySet(LogicalKeyboardKey.arrowUp): const _ShowControlsIntent(),
+        LogicalKeySet(LogicalKeyboardKey.arrowDown): const _HideControlsIntent(),
+        LogicalKeySet(LogicalKeyboardKey.escape): const _BackIntent(),
+        LogicalKeySet(LogicalKeyboardKey.keyF): const _FullScreenIntent(),
+        LogicalKeySet(LogicalKeyboardKey.keyM): const _MuteIntent(),
+      },
+      child: Actions(
+        actions: <Type, Action<Intent>>{
+          _PlayPauseIntent: _PlayPauseAction(_),
+          _SeekBackwardIntent: _SeekBackwardAction(_),
+          _SeekForwardIntent: _SeekForwardAction(_),
+          _ShowControlsIntent: _ShowControlsAction(_),
+          _HideControlsIntent: _HideControlsAction(_),
+          _BackIntent: _BackAction(_, widget.controller),
+          _FullScreenIntent: _FullScreenAction(widget.controller),
+          _MuteIntent: _MuteAction(_),
+        },
+        child: Focus(
+          autofocus: true,
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+// --- TV D-Pad Intent & Action 定义 ---
+
+class _PlayPauseIntent extends Intent {
+  const _PlayPauseIntent();
+}
+
+class _SeekBackwardIntent extends Intent {
+  const _SeekBackwardIntent();
+}
+
+class _SeekForwardIntent extends Intent {
+  const _SeekForwardIntent();
+}
+
+class _ShowControlsIntent extends Intent {
+  const _ShowControlsIntent();
+}
+
+class _HideControlsIntent extends Intent {
+  const _HideControlsIntent();
+}
+
+class _BackIntent extends Intent {
+  const _BackIntent();
+}
+
+class _FullScreenIntent extends Intent {
+  const _FullScreenIntent();
+}
+
+class _MuteIntent extends Intent {
+  const _MuteIntent();
+}
+
+class _PlayPauseAction extends Action<_PlayPauseIntent> {
+  final PlPlayerController controller;
+  _PlayPauseAction(this.controller);
+
+  @override
+  Object? invoke(_PlayPauseIntent intent) {
+    if (!controller.showControls.value) {
+      controller.controls = true;
+    } else {
+      controller.togglePlay();
+    }
+    return null;
+  }
+}
+
+class _SeekBackwardAction extends Action<_SeekBackwardIntent> {
+  final PlPlayerController controller;
+  _SeekBackwardAction(this.controller);
+
+  @override
+  Object? invoke(_SeekBackwardIntent intent) {
+    if (controller.controlsLock.value || controller.videoType == 'live') {
+      return null;
+    }
+    final current = controller.position.value;
+    final result = (current - const Duration(seconds: 10))
+        .clamp(Duration.zero, controller.duration.value);
+    controller.seekTo(result);
+    controller.controls = true;
+    return null;
+  }
+}
+
+class _SeekForwardAction extends Action<_SeekForwardIntent> {
+  final PlPlayerController controller;
+  _SeekForwardAction(this.controller);
+
+  @override
+  Object? invoke(_SeekForwardIntent intent) {
+    if (controller.controlsLock.value || controller.videoType == 'live') {
+      return null;
+    }
+    final current = controller.position.value;
+    final result = (current + const Duration(seconds: 10))
+        .clamp(Duration.zero, controller.duration.value);
+    controller.seekTo(result);
+    controller.controls = true;
+    return null;
+  }
+}
+
+class _ShowControlsAction extends Action<_ShowControlsIntent> {
+  final PlPlayerController controller;
+  _ShowControlsAction(this.controller);
+
+  @override
+  Object? invoke(_ShowControlsIntent intent) {
+    controller.controls = true;
+    return null;
+  }
+}
+
+class _HideControlsAction extends Action<_HideControlsIntent> {
+  final PlPlayerController controller;
+  _HideControlsAction(this.controller);
+
+  @override
+  Object? invoke(_HideControlsIntent intent) {
+    controller.controls = false;
+    return null;
+  }
+}
+
+class _BackAction extends Action<_BackIntent> {
+  final PlPlayerController controller;
+  final PlPlayerController playerController;
+  _BackAction(this.controller, this.playerController);
+
+  @override
+  Object? invoke(_BackIntent intent) {
+    if (controller.isFullScreen.value) {
+      playerController.triggerFullScreen();
+    } else {
+      Get.back();
+    }
+    return null;
+  }
+}
+
+class _FullScreenAction extends Action<_FullScreenIntent> {
+  final PlPlayerController controller;
+  _FullScreenAction(this.controller);
+
+  @override
+  Object? invoke(_FullScreenIntent intent) {
+    controller.triggerFullScreen();
+    return null;
+  }
+}
+
+class _MuteAction extends Action<_MuteIntent> {
+  final PlPlayerController controller;
+  _MuteAction(this.controller);
+
+  @override
+  Object? invoke(_MuteIntent intent) {
+    FlutterVolumeController.mute();
+    controller.controls = true;
+    return null;
   }
 }

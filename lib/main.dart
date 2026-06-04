@@ -25,14 +25,24 @@ import 'package:pilipala/utils/storage.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:pilipala/utils/recommend_filter.dart';
 import 'package:catcher_2/catcher_2.dart';
+import 'package:pilipala/utils/tv.dart';
 import './services/loggeer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await GStrorage.init();
+  await initTVDetect();
+
+  // TV 设备使用横屏，手机保持竖屏
+  if (isTV) {
+    await SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+  } else {
+    await SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  }
+
   clearLogs();
   Request();
   await Request.setCookie();
@@ -184,6 +194,8 @@ class BuildMainApp extends StatelessWidget {
             ? darkColorScheme
             : lightColorScheme,
         snackBarTheme: snackBarTheme,
+        focusColor: lightColorScheme.primary.withOpacity(0.12),
+        hoverColor: lightColorScheme.primary.withOpacity(0.08),
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
             TargetPlatform.android: ZoomPageTransitionsBuilder(

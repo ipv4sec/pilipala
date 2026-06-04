@@ -1,8 +1,10 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pilipala/plugin/pl_player/index.dart';
 import 'package:pilipala/utils/feed_back.dart';
+import 'package:pilipala/utils/tv.dart';
 
 class BottomControl extends StatelessWidget implements PreferredSizeWidget {
   final PlPlayerController? controller;
@@ -37,7 +39,7 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
               if (value > max || max <= 0) {
                 return const SizedBox();
               }
-              return Padding(
+              final progressBar = Padding(
                 padding: const EdgeInsets.only(left: 7, right: 7, bottom: 6),
                 child: ProgressBar(
                   progress: Duration(seconds: value),
@@ -65,6 +67,47 @@ class BottomControl extends StatelessWidget implements PreferredSizeWidget {
                   },
                 ),
               );
+
+              // TV 上为进度条添加焦点和键盘控制
+              if (isTV) {
+                return Focus(
+                  onKeyEvent: (node, event) {
+                    if (event is! KeyDownEvent) return KeyEventResult.ignored;
+                    final current = _.position.value;
+                    final total = _.duration.value;
+                    if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+                      final result =
+                          (current - const Duration(seconds: 5))
+                              .clamp(Duration.zero, total);
+                      _.seekTo(result);
+                      return KeyEventResult.handled;
+                    } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+                      final result =
+                          (current + const Duration(seconds: 5))
+                              .clamp(Duration.zero, total);
+                      _.seekTo(result);
+                      return KeyEventResult.handled;
+                    }
+                    return KeyEventResult.ignored;
+                  },
+                  child: Builder(
+                    builder: (context) {
+                      final hasFocus = Focus.of(context).hasFocus;
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: hasFocus
+                              ? Border.all(
+                                  color: colorTheme, width: 2)
+                              : null,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: progressBar,
+                      );
+                    },
+                  ),
+                );
+              }
+              return progressBar;
             },
           ),
           Row(children: [...buildBottomControl!]),
